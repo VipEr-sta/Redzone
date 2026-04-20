@@ -6,7 +6,7 @@ Redzone is a DSL(domain-specific language) used for the purpose of creating and 
 
 
 Example code: 
-```Redzone
+```javascript
 league myLeague;
 // Creating league
 team myLeague.myTeam;
