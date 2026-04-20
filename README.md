@@ -6,7 +6,7 @@ Redzone is a DSL(domain-specific language) used for the purpose of creating and 
 
 
 Example code: 
-```python
+```Redzone
 league myLeague;
 // Creating league
 team myLeague.myTeam;
@@ -42,7 +42,7 @@ EBNF Rules:
 
 var_dec = "let", identifier, "=" , expression; 
 
-literal = digit, {digit}, | '"', {character}, '"'; 
+literal = digit, {digit} | '"', {character}, '"'; 
 
 if_stmt = “if”, “(“, expression, “)” , “{“, {statement}, “}” ; 
 
@@ -131,11 +131,11 @@ sprint_stmt = “sprint”, “(“, expression, “)”, “;”;
 
 statement = var_dec | if_stmt | else_if_stmt| else_stmt | for_loop | sprint_stmt | trade_stmt | slice_dec;
 
-comp_operators = "==" | "!=" | "<=" | ">=" | "+=" | "-=" | "*=" | "/="
+comp_operators = "==" | "!=" | "<=" | ">=" | "+=" | "-=" | "*=" | "/=";
 
 expression = identifier | literal | expression, operator, expression;
 
-operators = "=" | "+" | "-" | "*" | "/"
+operators = "=" | "+" | "-" | "*" | "/";
 
  
 ```
@@ -149,16 +149,16 @@ operators = "=" | "+" | "-" | "*" | "/"
 |Else If Statement | `else if` | `else if (x == 4) {x+2;}` |
 | For Loop | `for` | `for (let i=0; i > 5; i+1) {x+5}` |
 | Single Line Comment | `//` | `// Single Line comment here` |
-| Multi Line Comment | `(* *)` | `(* Multi Line comment here` |
+| Multi Line Comment | `(* *)` | `(* Multi Line comment here *)` |
 | Player | `player` | `player league1.team1.player1;` |
 | Team | `team` | `team league1.team1;` |
 | League | `league` | `league league1;` |
 | Slice | `array` | `array amount = [5,6,7];` |
 | Trade Statement | `trade...with` | `trade {team.player with team1.player1;}` |
-| Scoped Itentifier | `.` | `player myleague.myteam.myplayer;`
-| Stats | `.points, .yards, .touchdowns` | `sprint(league.team.player.points);`
+| Scoped Itentifier | `.` | `player myleague.myteam.myplayer;` |
+| Stats | `.points, .yards, .touchdowns` | `sprint(league.team.player.points);` |
 | Comparision Operators | `==, !=, etc` | `if (x != 10) {x = 0;}`
-| Operators | `=, +, -, etc` | `y = 5 + 5;`
+| Operators | `=, +, -, etc` | `y = 5 + 5;` |
 
 
 Memebers: Elijah Goglin
