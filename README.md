@@ -1,5 +1,7 @@
 # Redzone
 
+![](redzone_logo.png)
+
 Redzone is a DSL(domain-specific language) used for the purpose of creating and managing fantasy football teams. It lets the developer create leagues, teams, and players, where one can trade players from different teams. These players are measured based on points, which comes from yards and touchdowns. Player points contribute to overall team points. It accomplishes this using dot-scoping, stat-access declaration, and football-themed error messages. 
 
 
