@@ -1,0 +1,25 @@
+league myLeague;
+// Creating league
+team myLeague.myTeam;
+// creating teams and players
+player myLeague.myTeam.myPlayer;
+player myLeague.team1.player1;
+player myLeague.team2.player2;
+
+let my_score = myLeague.myTeam.myPlayer.points;
+(*
+comparing points of players on separate teams
+
+*)
+
+if (myLeague.myTeam.myPlayer.points > myLeague.team1.player1.points) {
+    trade {
+        myTeam.myPlayer with team2.player2;
+    };
+}
+
+else {
+    sprint("Your player is doing excellent this season!");
+}
+
+
