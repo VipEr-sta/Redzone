@@ -183,6 +183,7 @@ def lexer(full_program):
 def parse(tokens):
     #parse the tokens and create an AST
     current = 0
+    condition_tokens = []
     ast = {
         "type": "Program",
         "body": []
@@ -206,7 +207,7 @@ def parse(tokens):
                 "type": "VariableDeclaration",
                 "name": tokens[current + 1]["value"],
                 "value": {
-                    "type": "NumberLiteral",
+                    "type": tokens[current + 3]["type"],
                     "value": tokens[current + 3]["value"]
                 }
             })
@@ -214,58 +215,12 @@ def parse(tokens):
             current = current + 5
 
 
-
-
-        elif (
-                current + 4 < len(tokens) and
-                tokens[current]["type"] == "KEYWORD" and
-                tokens[current]["value"] == "let" and
-                tokens[current + 1]["type"] == "IDENTIFIER" and
-                tokens[current + 2]["type"] == "EQUALS" and
-                tokens[current + 3]["type"] == "STRING" and
-                tokens[current + 4]["type"] == "SEMICOLON"
-
-        ):
-
-            ast["body"].append({
-                "type": "VariableDeclaration",
-                "name": tokens[current + 1]["value"],
-                "value": {
-                    "type": "StringLiteral",
-                    "value": tokens[current + 3]["value"]
-                }
-            })
-
-            current = current + 5
-
-        elif (
-                current + 4 < len(tokens) and
-                tokens[current]["type"] == "KEYWORD" and
-                tokens[current]["value"] == "let" and
-                tokens[current + 1]["type"] == "IDENTIFIER" and
-                tokens[current + 2]["type"] == "EQUALS" and
-                tokens[current + 3]["type"] == "BOOLEAN" and
-                tokens[current + 4]["type"] == "SEMICOLON"
-
-        ):
-
-
-            ast["body"].append({
-                "type": "VariableDeclaration",
-                "name": tokens[current + 1]["value"],
-                "value": {
-                    "type": "BooleanLiteral",
-                    "value": tokens[current + 3]["value"]
-                }
-            })
-
-            current = current + 5
 
         elif (
                 current + 3 < len(tokens) and
-                tokens[current]["type"] in ["IDENTIFIER", "NUMBER"] and
+                tokens[current]["type"] in ["IDENTIFIER", "NUMBER", "STRING", "BOOLEAN"] and
                 tokens[current + 1]["type"] in ["PLUS", "MINUS", "MULT", "DIV"] and
-                tokens[current + 2]["type"] in ["IDENTIFIER", "NUMBER"] and
+                tokens[current + 2]["type"] in ["IDENTIFIER", "NUMBER", "STRING", "BOOLEAN"] and
                 tokens[current + 3]["type"] == "SEMICOLON"
 
 
@@ -334,46 +289,44 @@ def parse(tokens):
         ):
 
             current = current + 5
-            #Conditionals IF STATEMENT: NUM TYPE
-        elif (
-                current + 5 < len(tokens) and
-                tokens[current]["type"] == "KEYWORD" and
-                tokens[current]["value"] == "if" and
-                tokens[current + 1]["type"] == "LPAREN" and
-                tokens[current + 2]["type"] == "IDENTIFIER" and
-                tokens[current + 3]["type"] == "COMPARISON_OPERATIOR" and
-                tokens[current + 4]["type"] == "NUMBER" and
-                tokens[current + 5]["type"] == "SEMICOLON"
-
-        ):
-            current = current + 6
+         
                 #IF STATEMENT: STRING TYPE
+
+
         elif (
-                current + 5 < len(tokens) and
+                
+                current + 8 < len(tokens) and
                 tokens[current]["type"] == "KEYWORD" and
                 tokens[current]["value"] == "if" and
                 tokens[current + 1]["type"] == "LPAREN" and
                 tokens[current + 2]["type"] == "IDENTIFIER" and
-                tokens[current + 3]["type"] == "COMPARISON_OPERATOR" and
-                tokens[current + 4]["type"] == "STRING" and
-                tokens[current + 5]["type"] == "SEMICOLON"
+                tokens[current + 3]["type"] in ["GREATER_EQUALS", "LESS_EQUALS", "EQUALS_EQUALS", "NOT_EQUALS"] and
+                tokens[current + 4]["type"] in ["NUMBER", "STRING", "BOOLEAN", "IDENTIFIER"] and
+                tokens[current + 5]["type"] == "LBRACE" and
+                tokens[current + 6]["type"] == "" and
+                tokens[current + 7]["type"] == "RBRACE" and
+                tokens[current + 8]["type"] == "SEMICOLON"
 
         ):
-            current = current + 6
-                # IF STATEMENT: BOOL TYPE
-        elif (
+                #need 
+                ast["body"].append({
+                    "type:": "If_Statement",
+                    "condition": condition_tokens,
+                    
+                       
 
-                current + 5 < len(tokens) and
-                tokens[current]["type"] == "KEYWORD" and
-                tokens[current]["value"] == "if" and
-                tokens[current + 1]["type"] == "LPAREN" and
-                tokens[current + 2]["type"] == "IDENTIFIER" and
-                tokens[current + 3]["type"] == "BOOLEAN" and
-                tokens[current + 4]["type"] == "COMPARISON_OPERATOR" and
-                tokens[current + 5]["type"] == "SEMICOLON"
+                                
 
-        ):
-            current = current + 6
+
+                    
+                    }
+
+                )
+
+            
+
+
+
 
 
                 # If it matches nothing, it is invalid
@@ -393,15 +346,46 @@ def interpreter(ast):
     leagues = {}
     for item in ast["body"]:
         if item["type"] == "VariableDeclaration":
-            variables[item["name"]] = item["value"]["value"]
+            if item["value"]["type"] == "BOOLEAN":
+                variables[item["name"]] = item["value"]["value"]
+            elif item["value"]["type"] == "NUMBER":
+                variables[item["name"]] = item["value"]["value"]
+            elif item["value"]["type"] == "STRING":
+                variables[item["name"]] = item["value"]["value"]
+            elif item["value"]["type"] == "IDENTIFIER":
+                variables[item["name"]] = variables[item["value"]["value"]]
+            else:
+                variables[item["name"]] = item["value"]["value"]
         elif item["type"] == "League_Declaration":
             leagues[item["name"]] = item["name"]
             #print(leagues[item["name"]])
         elif item["type"] == "Team_Declaration":
             pass
         elif item["type"] == "BinaryExpression":
-            left = item["left"]["value"] if item["left"]["type"] == "NUMBER" else variables[item["left"]["value"]]
-            right = item["right"]["value"] if item["right"]["type"] == "NUMBER" else variables[item["right"]["value"]]
+
+            if item["left"]["type"] == "IDENTIFIER":
+                left = variables[item["left"]["value"]]
+            elif item["left"]["type"] == "NUMBER":
+                left = item["left"]["value"]
+            elif item["left"]["type"] == "STRING":
+                left = item["left"]["value"]
+            elif item["left"]["type"] == "BOOLEAN":
+                left = item["left"]["value"]
+            else:
+                raise ValueError("Operand Intercepted!: " + item["left"]["type"])
+
+            if item["right"]["type"] == "IDENTIFIER":
+                right = variables[item["right"]["value"]]
+            elif item["right"]["type"] == "NUMBER":
+                right = item["right"]["value"]
+            elif item["right"]["type"] == "STRING":
+                right = item["right"]["value"]
+            elif item["right"]["type"] == "BOOLEAN":
+                right = item["right"]["value"] == "True" 
+            else:
+                raise ValueError("Operand Intercepted!: " + item["right"]["type"])
+            
+            
             if item["operator"] == "+":
                 variables[item["left"]["value"]] = left + right
                 

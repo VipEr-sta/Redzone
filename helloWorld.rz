@@ -10,18 +10,27 @@ I love this
 
 
 
-let x = 5 + 5;
+let x = 5;
 
-x+5;
+let y = x;
+
+
 
 sprint(x);
+sprint(y);
+
+let z = False;
+
+sprint(z);
 
 league MyLeague;
 
 team MyLeague.Myteam;
 
-let x = True;
-sprint(x);
+
+
+
+
 
 
 
