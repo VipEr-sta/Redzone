@@ -1,0 +1,100 @@
+ 
+
+var_dec = "let", identifier, "=" , expression; 
+
+literal = digit, {digit} | '"', {character}, '"'; 
+
+if_stmt = “if”, “(“, expression, “)” , “{“, {statement}, “}” ; 
+
+ 
+
+single_line_comment  = “//”, {character}, newline; 
+
+ 
+
+mult_line_comment = “(*”, {character}, “*)”; 
+
+ 
+
+for_loop = “for”, “(“ , var_dec, ";" , expression, “;”,  assignment, “)”, “{“, {statement}, “}”; 
+
+ 
+
+letter = "A" | "B" | "C" | "D" | "E" | "F" | "G" 
+      | "H" | "I" | "J" | "K" | "L" | "M" | "N" 
+      | "O" | "P" | "Q" | "R" | "S" | "T" | "U" 
+      | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" 
+      | "c" | "d" | "e" | "f" | "g" | "h" | "i" 
+      | "j" | "k" | "l" | "m" | "n" | "o" | "p" 
+      | "q" | "r" | "s" | "t" | "u" | "v" | "w" 
+      | "x" | "y" | "z" ; 
+
+ 
+
+digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ; 
+
+ 
+
+identifier = letter, { letter | digit | “_” } ; 
+
+ 
+
+white_space = ? white space characters ?; 
+
+ 
+
+else_stmt = “else”, “{“, {statement}, “}”; 
+
+ 
+
+else_if_stmt = “else”, white_space, “if”, “(“, expression, “)” , “{“, {statement}, “}” ; 
+
+ 
+
+ 
+
+player = “player”, identifier, “.”, identifier, “.” , identifier,“;”; 
+
+ 
+
+ 
+
+team = “team” , identifier, “.” , identifier,“;” ; 
+
+ 
+
+ 
+
+league = “league”, identifier, “;”; 
+
+ 
+
+slice_dec = “array”, identifier, “=”, “[“, expression, “]”, “;”; 
+
+ 
+
+trade_stmt= “trade” , “{“, scoped_identifier_for_trades , “with”, scoped_identifier_for_trades, “}“, “;”; 
+
+scoped_identifier = identifier, “.”, identifier, “.”, identifier; 
+
+scoped_identifier_for_trades= identifier, “.”, identifier; 
+
+ 
+
+stat_access = scoped_identifier, “.”, identifier, “;”; 
+
+ 
+
+sprint_stmt = “sprint”, “(“, expression, “)”, “;”; 
+
+ 
+
+statement = var_dec | if_stmt | else_if_stmt| else_stmt | for_loop | sprint_stmt | trade_stmt | slice_dec;
+
+comp_operators = "==" | "!=" | "<=" | ">=" | "+=" | "-=" | "*=" | "/=";
+
+expression = identifier | literal | expression, operator, expression;
+
+operators = "=" | "+" | "-" | "*" | "/";
+
+ 

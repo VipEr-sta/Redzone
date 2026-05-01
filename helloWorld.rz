@@ -1,3 +1,27 @@
 // My First Program 
+(*
 
-sprint("Hello World")
+Hello People
+I love this
+
+
+
+*)
+
+
+
+let x = 5 + 5;
+
+x+5;
+
+sprint(x);
+
+league MyLeague;
+
+team MyLeague.Myteam;
+
+let x = True;
+sprint(x);
+
+
+

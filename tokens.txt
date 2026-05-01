@@ -1,0 +1,3 @@
+tokens = [
+    {type: "SEMICOLON", value: ";"}
+]

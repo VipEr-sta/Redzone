@@ -15,7 +15,7 @@ comparing points of players on separate teams
 if (myLeague.myTeam.myPlayer.points > myLeague.team1.player1.points) {
     trade {
         myTeam.myPlayer with team2.player2;
-    };
+    }
 }
 
 else {
