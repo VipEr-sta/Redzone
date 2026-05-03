@@ -13,7 +13,7 @@ full_program = ""
 grammer = {
     "statement" :
         ["var_dec", "slice_dec", "if_stmt", "else_if_stmt", "else_stmt",
-         "for_loop", "sprint_stmt", "trade_stmt"],
+         "for_loop", "sprint_stmt", "trade_stmt", "league", "team", "player"],
 
     "var_dec" :
     ["KEYWORD(let)", "IDENTIFIER",
@@ -59,7 +59,7 @@ def lexer(full_program):
                 word += full_program[i]
                 i += 1
             if word in ["let", "sprint", "if", "else", "trade", "with",
-                        "array", "else if", "for", "league", "team" ]:
+                        "array", "else if", "for", "league", "team", "player" ]:
                 tokens.append({"type": "KEYWORD", "value": word})
             elif word == "True" or word == "False":
                 tokens.append({"type": "BOOLEAN", "value": word})
@@ -293,11 +293,46 @@ def parse(tokens):
                 tokens[current + 2]["type"] == "DOT" and
                 tokens[current + 3]["type"] == "IDENTIFIER" and
                 tokens[current + 4]["type"] == "SEMICOLON"
-        ):
+        ):  
+            
+            league_name = tokens[current + 1]["value"]
+            team_name = tokens[current + 3]["value"]
+
+            ast["body"].append({
+                "type": "Team_Declaration",
+                "name": team_name,
+                "league": league_name
+
+            })
 
             current = current + 5
+        #Player Declaration:
+        elif (
+                current + 6 < len(tokens) and
+                tokens[current]["type"] == "KEYWORD" and
+                tokens[current]["value"] == "player" and
+                tokens[current + 1]["type"] == "IDENTIFIER" and
+                tokens[current + 2]["type"] == "DOT" and
+                tokens[current + 3]["type"] == "IDENTIFIER" and
+                tokens[current + 4]["type"] == "DOT" and 
+                tokens[current + 5]["type"] == "IDENTIFIER" and
+                tokens[current + 6]["type"] == "SEMICOLON"
+
+        ):
+            
+            league_name = tokens[current + 1]["value"]
+            team_name = tokens[current + 3]["value"]
+            player_name = tokens[current + 5]["value"]
+            ast["body"].append({
+                "type": "Player_Declaration",
+                "name": player_name,
+                "team": team_name,
+                "league": league_name
+
+            })
+            current = current + 7
          
-                #IF STATEMENT:
+                #IF STATEMENT
 
 
         elif (
@@ -363,6 +398,7 @@ def parse(tokens):
                     tokens[current + 6]["type"] == "RPAREN" and
                     tokens[current + 7]["type"] == "LBRACE"
                 ):
+                    
                     condition_tokens.append(tokens[current + 5])
             
                     end = current + 8
@@ -411,7 +447,69 @@ def parse(tokens):
                         "type": "Else_Statement",
                         "body": body_tokens
                     })
-            
+            # FOR LOOP:
+        elif (
+                current + 15 < len(tokens) and
+                tokens[current]["type"] == "KEYWORD" and
+                tokens[current]["value"] == "for" and
+                tokens[current + 1]["type"] == "LPAREN" and
+                tokens[current + 2]["type"] == "KEYWORD" and
+                tokens[current + 2]["value"] == "let" and
+                tokens[current + 3]["type"] == "IDENTIFIER" and
+                tokens[current + 4]["type"] == "EQUALS" and
+                tokens[current + 5]["type"] in ["NUMBER", "STRING", "BOOLEAN", "IDENTIFIER"] and
+                tokens[current + 6]["type"] == "SEMICOLON" and
+                tokens[current + 7]["type"] == "IDENTIFIER" and
+                tokens[current + 8]["type"] in ["LESS_EQUALS", "LESS_THAN", "GREATER_EQUALS", "GREATER_THAN", 
+                                                "NOT_EQUALS", "EQUALS_EQUALS", "EQUALS"] and
+                tokens[current + 9]["type"] in ["NUMBER", "STRING", "BOOLEAN", "IDENTIFIER"] and
+                tokens[current + 10]["type"] == "SEMICOLON" and
+                tokens[current + 11]["type"] == "IDENTIFIER" and
+                tokens[current + 12]["type"] in ["PLUS", "MINUS"] and
+                tokens[current + 13]["type"] == "RPAREN" and
+                tokens[current + 14]["type"] == "LBRACE"
+            ):
+
+                end = current + 15
+
+                while end < len(tokens) and tokens[end]["type"] != "RBRACE":
+                    end += 1
+                #captures tokens for the initialization, condition, and increment parts of the for loop
+                name = tokens[current + 3]["value"]
+                value = tokens[current + 5]["value"]
+                value_type = tokens[current + 5]["type"]
+                left = tokens[current + 7]
+                operator = tokens[current + 8]["value"]
+                right = tokens[current + 9]
+                update_var = tokens[current + 11]
+                increment_operator = tokens[current + 12]["value"]
+                body_tokens = tokens[current + 15 : end]
+                
+                current = end + 1
+
+                ast["body"].append({
+                    "type": "For_Loop",
+                    "declaration": {
+                        "type": "VariableDeclaration",
+                        "name": name,
+                        "value": {
+                            "type": value_type,
+                            "value": value
+                        }
+                    },
+                    "condition": {
+                        "left": left,
+                        "operator": operator,
+                        "right": right,
+                    },
+                    "increment": {
+                        "variable": update_var,
+                        "operator": increment_operator
+                    },
+                    "body": body_tokens
+                })
+
+                
                 
             
 
@@ -453,8 +551,30 @@ def interpreter(ast, variables=None, leagues=None):
         elif item["type"] == "League_Declaration":
             leagues[item["name"]] = item["name"]
             #print(leagues[item["name"]])
+
+        
         elif item["type"] == "Team_Declaration":
-            pass
+            league_name = item["league"]
+            team_name = item["name"]
+            if league_name in leagues:
+                if league_name not in variables:
+                    variables[league_name] = {}
+                variables[league_name][team_name] = []
+            else:
+                raise ValueError("League does not exist: " + league_name)
+        elif item["type"] == "Player_Declaration":
+            #Player Must be on a team
+            league_name = item["league"]
+            team_name = item["team"]
+            player_name = item["name"]
+            if league_name in leagues:
+                if league_name not in variables:
+                    variables[league_name] = {}
+                if team_name not in variables[league_name]:
+                    variables[league_name][team_name] = []
+                variables[league_name][team_name].append(player_name)
+            else:
+                raise ValueError("League does not exist: " + league_name)
         elif item["type"] == "BinaryExpression":
 
             if item["left"]["type"] == "IDENTIFIER":
@@ -660,7 +780,89 @@ def interpreter(ast, variables=None, leagues=None):
                 pass
         
 
+        #Starting to get for loop
+        #at the moment only supports for (let Identifier = NUMBER;
+        #Only going to impliment the for loop with a variable declaration in the initialization, but it can be expanded later to support more complex initialization statements
+        elif item["type"] == "For_Loop":
+            loop_variable = item["declaration"]["name"]
+            loop_variable_value = item["declaration"]["value"]["value"]
 
+            variables[loop_variable] = loop_variable_value
+
+            print(f"Entering for loop with {loop_variable} = {variables[loop_variable]}")
+            left = None
+            right = None
+            condition = item["condition"]
+            if condition["left"]["type"] == "IDENTIFIER":
+                left = variables[condition["left"]["value"]]
+            else:
+                raise ValueError("Operand Intercepted!: " + condition["left"]["type"])
+            if condition["right"]["type"] == "NUMBER":
+                right = condition["right"]["value"]
+            elif condition["right"]["type"] == "IDENTIFIER":
+                right = variables[condition["right"]["value"]]
+            else:
+                raise ValueError("Operand Intercepted!: " + condition["right"]["type"])
+            if condition["operator"] == "<":
+                while left < right:
+                    body_ast = parse(item["body"])
+                    interpreter(body_ast, variables, leagues)
+                    left = variables[condition["left"]["value"]]
+                    if item["increment"]["operator"] == "+":
+                        variables[item["increment"]["variable"]["value"]] += 1
+                    elif item["increment"]["operator"] == "-":
+                        variables[item["increment"]["variable"]["value"]] -= 1
+            if condition["operator"] == "<=":
+                while left <= right:
+                    body_ast = parse(item["body"])
+                    interpreter(body_ast, variables, leagues)
+                    left = variables[condition["left"]["value"]]
+                    if item["increment"]["operator"] == "+":
+                        variables[item["increment"]["variable"]["value"]] += 1
+                    elif item["increment"]["operator"] == "-":
+                        variables[item["increment"]["variable"]["value"]] -= 1
+            if condition["operator"] == ">":
+                while left > right:
+                    body_ast = parse(item["body"])
+                    interpreter(body_ast, variables, leagues)
+                    left = variables[condition["left"]["value"]]
+                    if item["increment"]["operator"] == "+":
+                        variables[item["increment"]["variable"]["value"]] += 1
+                    elif item["increment"]["operator"] == "-":
+                        variables[item["increment"]["variable"]["value"]] -= 1
+            if condition["operator"] == ">=":
+                while left >= right:
+                    body_ast = parse(item["body"])
+                    interpreter(body_ast, variables, leagues)
+                    left = variables[condition["left"]["value"]]
+                    if item["increment"]["operator"] == "+":
+                        variables[item["increment"]["variable"]["value"]] += 1
+                    elif item["increment"]["operator"] == "-":
+                        variables[item["increment"]["variable"]["value"]] -= 1
+            if condition["operator"] == "==":
+                while left == right:
+                    body_ast = parse(item["body"])
+                    interpreter(body_ast, variables, leagues)
+                    left = variables[condition["left"]["value"]]
+                    if item["increment"]["operator"] == "+":
+                        variables[item["increment"]["variable"]["value"]] += 1
+                    elif item["increment"]["operator"] == "-":
+                        variables[item["increment"]["variable"]["value"]] -= 1
+            if condition["operator"] == "!=":
+                while left != right:
+                    body_ast = parse(item["body"])
+                    interpreter(body_ast, variables, leagues)
+                    left = variables[condition["left"]["value"]]
+                    if item["increment"]["operator"] == "+":
+                        variables[item["increment"]["variable"]["value"]] += 1
+                    elif item["increment"]["operator"] == "-":
+                        variables[item["increment"]["variable"]["value"]] -= 1
+            
+            
+            
+
+
+        
 
 
 
@@ -672,7 +874,7 @@ if __name__ == "__main__":
     full_program = readProgram()
     tokens = lexer(full_program)
     print(tokens)
-    print(tokens[67])
+    print(tokens[8])
     ast = parse(tokens)
     #print(json.dumps(ast, indent=2))
     interpreter(ast)

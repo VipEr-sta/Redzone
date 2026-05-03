@@ -8,6 +8,13 @@ I love this
 
 *)
 
+league myLeague;
+
+team myLeague.myTeam;
+
+player myLeague.myTeam.myPlayer;
+
+
 
 
 let x = 5;
@@ -45,7 +52,12 @@ else {
     sprint(z);
 }
 
-sprint(x);
+
+for (let i = 0; i < 5; i +) {
+    sprint(i);
+}
+
+ sprint(x);
 
 
 
