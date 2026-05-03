@@ -91,9 +91,11 @@ def lexer(full_program):
                 i += 1
                 while i < len(full_program) and full_program[i] != '"':
                     string += full_program[i]
-                    i += 1
-                i += 1
+                    i+=1
+                i +=1
+                
                 tokens.append({"type": "STRING", "value": string})
+                continue
 
             elif token == "(":
                 if  i < len (full_program) and full_program[i+1] == "*":
@@ -121,7 +123,7 @@ def lexer(full_program):
             #comparison operators
             elif token == "=":
                 if i + 1 < len(full_program) and full_program[i+1] == "=":
-                    tokens.append({"type": "EQUALS_EQUALS", "value": token})
+                    tokens.append({"type": "EQUALS_EQUALS", "value": "=="})
                     i+=1
                 else:
                     tokens.append({"type": "EQUALS", "value": token})
@@ -158,6 +160,11 @@ def lexer(full_program):
                     tokens.append({"type": "MULT_EQUALS", "value": token})
                 else:
                     tokens.append({"type": "MULT", "value": token})
+            elif token == "%":
+                if i < len(full_program) and full_program[i+1] == "=":
+                    tokens.append({"type": "MOD_EQUALS", "value": token})
+                else:
+                    tokens.append({"type": "MOD", "value": token})
 
 
 
@@ -219,7 +226,7 @@ def parse(tokens):
         elif (
                 current + 3 < len(tokens) and
                 tokens[current]["type"] in ["IDENTIFIER", "NUMBER", "STRING", "BOOLEAN"] and
-                tokens[current + 1]["type"] in ["PLUS", "MINUS", "MULT", "DIV"] and
+                tokens[current + 1]["type"] in ["PLUS", "MINUS", "MULT", "DIV", "MOD"] and
                 tokens[current + 2]["type"] in ["IDENTIFIER", "NUMBER", "STRING", "BOOLEAN"] and
                 tokens[current + 3]["type"] == "SEMICOLON"
 
@@ -290,39 +297,122 @@ def parse(tokens):
 
             current = current + 5
          
-                #IF STATEMENT: STRING TYPE
+                #IF STATEMENT:
 
 
         elif (
                 
-                current + 8 < len(tokens) and
+                current + 6 < len(tokens) and
                 tokens[current]["type"] == "KEYWORD" and
                 tokens[current]["value"] == "if" and
                 tokens[current + 1]["type"] == "LPAREN" and
                 tokens[current + 2]["type"] == "IDENTIFIER" and
                 tokens[current + 3]["type"] in ["GREATER_EQUALS", "LESS_EQUALS", "EQUALS_EQUALS", "NOT_EQUALS"] and
                 tokens[current + 4]["type"] in ["NUMBER", "STRING", "BOOLEAN", "IDENTIFIER"] and
-                tokens[current + 5]["type"] == "LBRACE" and
-                tokens[current + 6]["type"] == "" and
-                tokens[current + 7]["type"] == "RBRACE" and
-                tokens[current + 8]["type"] == "SEMICOLON"
+                tokens[current + 5]["type"] == "RPAREN" and
+                tokens[current + 6]["type"] == "LBRACE"
 
-        ):
+            ):
+
+                condition_tokens.append(tokens[current + 4])
+            
+                end = current + 7
+
+        
+
+                while end < len(tokens) and tokens[end]["type"] != "RBRACE":
+                    end += 1
+                
+                left_token = tokens[current + 2]
+                operator_token = tokens[current + 3]
+                right_token = tokens[current + 4]
+
+                body_tokens = tokens[current + 7 :end]
+                current = end + 1
+                   
+                
+        
                 #need 
                 ast["body"].append({
-                    "type:": "If_Statement",
-                    "condition": condition_tokens,
-                    
-                       
-
-                                
-
-
-                    
+                    "type": "If_Statement",
+                    "condition": 
+                    {
+                        "left": left_token,
+                        "operator": operator_token["value"],
+                        "right": right_token,
+                        "body": body_tokens
                     }
 
-                )
+                        
 
+
+                    
+                    })
+                
+                #ElSE IF STATEMENT:
+        elif (
+                    current + 8 < len(tokens) and
+                    tokens[current]["type"] == "KEYWORD" and
+                    tokens[current]["value"] == "else" and
+                    tokens[current + 1]["type"] == "KEYWORD" and
+                    tokens[current + 1]["value"] == "if" and
+                    tokens[current + 2]["type"] == "LPAREN" and
+                    tokens[current + 3]["type"] == "IDENTIFIER" and
+                    tokens[current + 4]["type"] in ["GREATER_EQUALS", "LESS_EQUALS", "EQUALS_EQUALS", "NOT_EQUALS"] and
+                    tokens[current + 5]["type"] in ["NUMBER", "STRING", "BOOLEAN", "IDENTIFIER"] and
+                    tokens[current + 6]["type"] == "RPAREN" and
+                    tokens[current + 7]["type"] == "LBRACE"
+                ):
+                    condition_tokens.append(tokens[current + 5])
+            
+                    end = current + 8
+
+        
+
+                    while end < len(tokens) and tokens[end]["type"] != "RBRACE":
+                        end += 1
+                
+                    left_token = tokens[current + 3]
+                    operator_token = tokens[current + 4]
+                    right_token = tokens[current + 5]
+
+                    body_tokens = tokens[current + 8 :end]
+                    current = end + 1
+
+                    ast["body"].append({
+                        "type": "Else_If_Statement",
+                        "condition": 
+                        {
+                            "left": left_token,
+                            "operator": operator_token["value"],
+                            "right": right_token,
+                            "body": body_tokens
+                        }
+
+                        
+
+
+                    
+                    })
+                # ELSE STATEMENT:
+        elif (
+                    current + 1 < len(tokens) and
+                    tokens[current]["type"] == "KEYWORD" and
+                    tokens[current]["value"] == "else" and
+                    tokens[current + 1]["type"] == "LBRACE"
+                ):
+                    end = current + 2
+                    while end < len(tokens) and tokens[end]["type"] != "RBRACE":
+                        end += 1
+                    body_tokens = tokens[current + 2 : end]
+                    current = end + 1
+
+                    ast["body"].append({
+                        "type": "Else_Statement",
+                        "body": body_tokens
+                    })
+            
+                
             
 
 
@@ -336,14 +426,18 @@ def parse(tokens):
     return ast
 
 
-def interpreter(ast):
+def interpreter(ast, variables=None, leagues=None):
     #will print output to console
+    
+
+    if variables is None:
+        variables = {}
+    if leagues is None:
+        leagues = {}
 
 
-
-
-    variables = {}
-    leagues = {}
+    is_if_executed = False
+    is_elif_executed = False
     for item in ast["body"]:
         if item["type"] == "VariableDeclaration":
             if item["value"]["type"] == "BOOLEAN":
@@ -387,23 +481,184 @@ def interpreter(ast):
             
             
             if item["operator"] == "+":
-                variables[item["left"]["value"]] = left + right
+
+                if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+                    variables[item["left"]["value"]] = left + right
+                elif isinstance(left, str) and isinstance(right, str):
+                    variables[item["left"]["value"]] = left + right
+                else:
+                    raise ValueError("What an awful throw!: " + str(left) + " and " + str(right))
+                
+                
                 
             elif item["operator"] == "-":
                 variables[item["left"]["value"]] = left - right
+                if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+                    variables[item["left"]["value"]] = left - right
+                else:
+                    raise ValueError("What an awful throw!: " + str(left) + " and " + str(right))
+                
+                
             
             elif item["operator"] == "*":
-                variables[item["left"]["value"]] = left * right
+                if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+                    variables[item["left"]["value"]] = left * right
+                else:
+                    raise ValueError("What an awful throw!: " + str(left) + " and " + str(right))
+
+                
+
                 
             elif item["operator"] == "/":
-                variables[item["left"]["value"]] = left / right
+                if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+                    if right == 0:
+                        raise ValueError("Division by zero error!")
+                    variables[item["left"]["value"]] = left / right
+            elif item["operator"] == "%":
+                if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+                    if right == 0:
+                        raise ValueError("Modulo by zero error!")
+                    variables[item["left"]["value"]] = left % right
+                else:
+                    raise ValueError("What an awful throw!: " + str(left) + " and " + str(right))
                 
         elif item["type"] == "PrintStatement":
             print(variables[item["argument"]["value"]])
-        
-                
-            
 
+        elif item["type"] == "If_Statement":
+            condition = item["condition"]
+            left = None
+            right = None
+            if condition["left"]["type"] == "IDENTIFIER":
+                left = variables[condition["left"]["value"]]
+            elif condition["left"]["type"] == "NUMBER":
+                left = condition["left"]["value"]
+            elif condition["left"]["type"] == "STRING":
+                left = condition["left"]["value"]
+            elif condition["left"]["type"] == "BOOLEAN":
+                left = condition["left"]["value"]
+            else:
+                raise ValueError("Operand Intercepted!: " + condition["left"]["type"])
+
+            if condition["right"]["type"] == "IDENTIFIER":
+                right = variables[condition["right"]["value"]]
+            elif condition["right"]["type"] == "NUMBER":
+                right = condition["right"]["value"]
+            elif condition["right"]["type"] == "STRING":
+                right = condition["right"]["value"]
+            elif condition["right"]["type"] == "BOOLEAN":
+                right = condition["right"]["value"] == "True" 
+            else:
+                raise ValueError("Operand Intercepted!: " + condition["right"]["type"])
+            
+            operator = condition["operator"]
+
+            if operator == "==":
+                if left == right:
+                    body_ast = parse(item["condition"]["body"])
+                    interpreter(body_ast, variables, leagues)
+                    is_if_executed = True
+                else:
+                    is_if_executed = False
+            elif operator == "!=":
+                if left != right:
+                    body_ast = parse(item["condition"]["body"])
+                    interpreter(body_ast, variables, leagues)
+                    is_if_executed = True
+                else:
+                    is_if_executed = False
+            elif operator == "<":
+                if left < right:
+                    body_ast = parse(item["condition"]["body"])
+                    interpreter(body_ast, variables, leagues)
+                    is_if_executed = True
+                else:
+                    is_if_executed = False
+            elif operator == "<=":
+                if left <= right:
+                    body_ast = parse(item["condition"]["body"])
+                    interpreter(body_ast, variables, leagues)
+                    is_if_executed = True
+                else:
+                    is_if_executed = False
+            elif operator == ">":
+                if left > right:
+                    body_ast = parse(item["condition"]["body"])
+                    interpreter(body_ast, variables, leagues)
+                    is_if_executed = True
+                else:
+                    is_if_executed = False
+            elif operator == ">=":
+                if left >= right:
+                    body_ast = parse(item["condition"]["body"])
+                    interpreter(body_ast, variables, leagues)
+                    is_if_executed = True
+                else:
+                    is_if_executed = False
+        elif item["type"] == "Else_If_Statement":
+            condition = item["condition"]
+            left = None
+            right = None
+            if condition["left"]["type"] == "IDENTIFIER":
+                left = variables[condition["left"]["value"]]
+            elif condition["left"]["type"] == "NUMBER":
+                left = condition["left"]["value"]
+            elif condition["left"]["type"] == "STRING":
+                left = condition["left"]["value"]
+            elif condition["left"]["type"] == "BOOLEAN":
+                left = condition["left"]["value"]
+            else:
+                raise ValueError("Operand Intercepted!: " + condition["left"]["type"])
+
+            if condition["right"]["type"] == "IDENTIFIER":
+                right = variables[condition["right"]["value"]]
+            elif condition["right"]["type"] == "NUMBER":
+                right = condition["right"]["value"]
+            elif condition["right"]["type"] == "STRING":
+                right = condition["right"]["value"]
+            elif condition["right"]["type"] == "BOOLEAN":
+                right = condition["right"]["value"] == "True" 
+            else:
+                raise ValueError("Operand Intercepted!: " + condition["right"]["type"])
+            
+            operator = condition["operator"]
+
+            if operator == "==":
+                if left == right and not is_if_executed:
+                    body_ast = parse(item["condition"]["body"])
+                    interpreter(body_ast, variables, leagues)
+                    is_elif_executed = True
+                else:
+                    is_elif_executed = False
+            elif operator == "!=":
+                if left != right and not is_if_executed:
+                    body_ast = parse(item["condition"]["body"])
+                    interpreter(body_ast, variables, leagues)
+                    is_elif_executed = True
+                else:
+                    is_elif_executed = False
+            elif operator == "<":
+                if left < right and not is_if_executed:
+                    body_ast = parse(item["condition"]["body"])
+                    interpreter(body_ast, variables, leagues)
+                    is_elif_executed = True
+                else:
+                    is_elif_executed = False
+            elif operator == "<=":
+                if left <= right and not is_if_executed:
+                    body_ast = parse(item["condition"]["body"])
+                    interpreter(body_ast, variables, leagues)
+                    is_elif_executed = True
+                else:
+                    is_elif_executed = False
+        
+        elif item["type"] == "Else_Statement":
+            if not is_if_executed and not is_elif_executed:
+                body_ast = parse(item["body"])
+                interpreter(body_ast, variables, leagues)
+            else:
+                pass
+        
 
 
 
@@ -417,6 +672,7 @@ if __name__ == "__main__":
     full_program = readProgram()
     tokens = lexer(full_program)
     print(tokens)
+    print(tokens[67])
     ast = parse(tokens)
     #print(json.dumps(ast, indent=2))
     interpreter(ast)
