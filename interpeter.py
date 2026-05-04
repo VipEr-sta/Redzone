@@ -222,7 +222,7 @@ def parse(tokens):
             current = current + 5
 
 
-
+            # Check for binary expression grammar
         elif (
                 current + 3 < len(tokens) and
                 tokens[current]["type"] in ["IDENTIFIER", "NUMBER", "STRING", "BOOLEAN"] and
@@ -285,6 +285,7 @@ def parse(tokens):
             })
 
             current = current + 3
+            #Creating a team within a league
         elif (
                 current + 4 < len(tokens) and
                 tokens[current]["type"] == "KEYWORD" and
@@ -367,7 +368,7 @@ def parse(tokens):
                    
                 
         
-                #need 
+                
                 ast["body"].append({
                     "type": "If_Statement",
                     "condition": 
@@ -633,10 +634,12 @@ def interpreter(ast, variables=None, leagues=None):
             player2 = item["player2"]["value"]
             
             #find the teams and players in the variables and trade them
-            #league is already checked in the player declaration, so we can assume the league exists
+            
             team1_found = False
             team2_found = False
+            #checking league variable in variables dict
             for league in variables:
+                
                 if team1 in variables[league]:
                     if player1 in variables[league][team1]:
                         team1_found = True
@@ -644,6 +647,7 @@ def interpreter(ast, variables=None, leagues=None):
                         print(f"Traded {player1} from {team1} to {team2}")
                     else:
                         raise ValueError("Player " + player1 + " not found on team " + team1)
+                    
                 if team2 in variables[league]:
                     if player2 in variables[league][team2]:
                         team2_found = True
@@ -654,7 +658,7 @@ def interpreter(ast, variables=None, leagues=None):
 
                 
         elif item["type"] == "BinaryExpression":
-
+            #evaluate the left and right sides of the expression
             if item["left"]["type"] == "IDENTIFIER":
                 left = variables[item["left"]["value"]]
             elif item["left"]["type"] == "NUMBER":
@@ -677,7 +681,7 @@ def interpreter(ast, variables=None, leagues=None):
             else:
                 raise ValueError("Operand Intercepted!: " + item["right"]["type"])
             
-            
+            #operations
             if item["operator"] == "+":
 
                 if isinstance(left, (int, float)) and isinstance(right, (int, float)):
@@ -725,6 +729,7 @@ def interpreter(ast, variables=None, leagues=None):
 
         elif item["type"] == "If_Statement":
             condition = item["condition"]
+            #left and right sides evaluation of IF STATEMENT
             left = None
             right = None
             if condition["left"]["type"] == "IDENTIFIER":
@@ -750,7 +755,7 @@ def interpreter(ast, variables=None, leagues=None):
                 raise ValueError("Operand Intercepted!: " + condition["right"]["type"])
             
             operator = condition["operator"]
-
+            #Operations for IF STATEMENT
             if operator == "==":
                 if left == right:
                     body_ast = parse(item["condition"]["body"])
@@ -795,6 +800,7 @@ def interpreter(ast, variables=None, leagues=None):
                     is_if_executed = False
         elif item["type"] == "Else_If_Statement":
             condition = item["condition"]
+            #Evaluate the left and right sides of the expression
             left = None
             right = None
             if condition["left"]["type"] == "IDENTIFIER":
@@ -820,7 +826,7 @@ def interpreter(ast, variables=None, leagues=None):
                 raise ValueError("Operand Intercepted!: " + condition["right"]["type"])
             
             operator = condition["operator"]
-
+            #Operations for ELSE IF STATEMENT
             if operator == "==":
                 if left == right and not is_if_executed:
                     body_ast = parse(item["condition"]["body"])
@@ -851,6 +857,7 @@ def interpreter(ast, variables=None, leagues=None):
                     is_elif_executed = False
         
         elif item["type"] == "Else_Statement":
+            #body of if statement will only execute if no previous if or else if statements were executed
             if not is_if_executed and not is_elif_executed:
                 body_ast = parse(item["body"])
                 interpreter(body_ast, variables, leagues)
@@ -858,10 +865,10 @@ def interpreter(ast, variables=None, leagues=None):
                 pass
         
 
-        #Starting to get for loop
-        #at the moment only supports for (let Identifier = NUMBER;
-        #Only going to impliment the for loop with a variable declaration in the initialization, but it can be expanded later to support more complex initialization statements
+        
+       
         elif item["type"] == "For_Loop":
+            #delcaration of loop
             loop_variable = item["declaration"]["name"]
             loop_variable_value = item["declaration"]["value"]["value"]
 
@@ -870,6 +877,7 @@ def interpreter(ast, variables=None, leagues=None):
             print(f"Entering for loop with {loop_variable} = {variables[loop_variable]}")
             left = None
             right = None
+            #Condition evaluation of loop
             condition = item["condition"]
             if condition["left"]["type"] == "IDENTIFIER":
                 left = variables[condition["left"]["value"]]
@@ -928,6 +936,7 @@ def interpreter(ast, variables=None, leagues=None):
                         variables[item["increment"]["variable"]["value"]] -= 1
             if condition["operator"] == "!=":
                 while left != right:
+                    #increment or decrement loop variable at end of each iteration
                     body_ast = parse(item["body"])
                     interpreter(body_ast, variables, leagues)
                     left = variables[condition["left"]["value"]]
@@ -949,11 +958,12 @@ def interpreter(ast, variables=None, leagues=None):
 
 
 if __name__ == "__main__":
+    #read the program from a file, parse it, and interpret it
     full_program = readProgram()
     tokens = lexer(full_program)
     print(tokens)
     print(tokens[8])
     ast = parse(tokens)
-    #print(json.dumps(ast, indent=2))
+    print(json.dumps(ast, indent=2))
     interpreter(ast)
 
