@@ -46,19 +46,11 @@ literal = digit, {digit} | '"', {character}, '"';
 
 if_stmt = “if”, “(“, expression, “)” , “{“, {statement}, “}” ; 
 
- 
-
 single_line_comment  = “//”, {character}, newline; 
-
- 
 
 mult_line_comment = “(*”, {character}, “*)”; 
 
- 
-
 for_loop = “for”, “(“ , var_dec, ";" , expression, “;”,  assignment, “)”, “{“, {statement}, “}”; 
-
- 
 
 letter = "A" | "B" | "C" | "D" | "E" | "F" | "G" 
       | "H" | "I" | "J" | "K" | "L" | "M" | "N" 
@@ -69,49 +61,23 @@ letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
       | "q" | "r" | "s" | "t" | "u" | "v" | "w" 
       | "x" | "y" | "z" ; 
 
- 
-
 digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ; 
-
- 
 
 identifier = letter, { letter | digit | “_” } ; 
 
- 
-
 white_space = ? white space characters ?; 
-
- 
 
 else_stmt = “else”, “{“, {statement}, “}”; 
 
- 
-
 else_if_stmt = “else”, white_space, “if”, “(“, expression, “)” , “{“, {statement}, “}” ; 
 
- 
-
- 
-
-player = “player”, identifier, “.”, identifier, “.” , identifier,“;”; 
-
- 
-
- 
+player = “player”, identifier, “.”, identifier, “.” , identifier,“;”;
 
 team = “team” , identifier, “.” , identifier,“;” ; 
 
- 
-
- 
-
 league = “league”, identifier, “;”; 
 
- 
-
 slice_dec = “array”, identifier, “=”, “[“, expression, “]”, “;”; 
-
- 
 
 trade_stmt= “trade” , “{“, scoped_identifier_for_trades , “with”, scoped_identifier_for_trades, “}“, “;”; 
 
@@ -119,15 +85,9 @@ scoped_identifier = identifier, “.”, identifier, “.”, identifier;
 
 scoped_identifier_for_trades= identifier, “.”, identifier; 
 
- 
-
 stat_access = scoped_identifier, “.”, identifier, “;”; 
 
- 
-
 sprint_stmt = “sprint”, “(“, expression, “)”, “;”; 
-
- 
 
 statement = var_dec | if_stmt | else_if_stmt| else_stmt | for_loop | sprint_stmt | trade_stmt | slice_dec;
 
@@ -159,6 +119,7 @@ operators = "=" | "+" | "-" | "*" | "/";
 | Stats | `.points, .yards, .touchdowns` | `sprint(league.team.player.points);` |
 | Comparision Operators | `==, !=, etc` | `if (x != 10) {x = 0;}`
 | Operators | `=, +, -, etc` | `y = 5 + 5;` |
+| Concatenation | `+` | `x + y;` |
 
 1. What works:
    1. Variable
@@ -176,6 +137,7 @@ operators = "=" | "+" | "-" | "*" | "/";
    13. Scoped Identifier
    14. Comparison Operators
    15. Operators
+   16. Concatenation
        
 1. What doesn't work:
    1. Slice
