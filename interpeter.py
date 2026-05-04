@@ -509,7 +509,58 @@ def parse(tokens):
                     "body": body_tokens
                 })
 
+            
+            #Trade Statement:
+        elif (
+                current + 10 < len(tokens) and
+                tokens[current]["type"] == "KEYWORD" and
+                tokens[current]["value"] == "trade" and
+                tokens[current + 1]["type"] == "LBRACE" and
+                tokens[current + 2]["type"] == "IDENTIFIER" and
+                tokens[current + 3]["type"] == "DOT" and
+                tokens[current + 4]["type"] == "IDENTIFIER" and
+                tokens[current + 5]["type"] == "KEYWORD" and
+                tokens[current + 5]["value"] == "with" and
+                tokens[current + 6]["type"] == "IDENTIFIER" and
+                tokens[current + 7]["type"] == "DOT" and
+                tokens[current + 8]["type"] == "IDENTIFIER" and
+                tokens[current + 9]["type"] == "RBRACE"
                 
+                
+
+            ):  
+
+            
+            team1_type = tokens[current + 2]["type"]
+            team1_value = tokens[current + 2]["value"]
+            player1_type = tokens[current + 4]["type"]
+            player1_value = tokens[current + 4]["value"]
+            team2_type = tokens[current + 6]["type"]
+            team2_value = tokens[current + 6]["value"]
+            player2_type = tokens[current + 8]["type"]
+            player2_value = tokens[current + 8]["value"]
+            current = current + 10
+
+            ast["body"].append({
+                "type": "Trade_Statement",
+                "team1": {
+                    "type": team1_type,
+                    "value": team1_value
+                },
+                "player1": {
+                    "type": player1_type,
+                    "value": player1_value
+                },
+                "team2": {
+                    "type": team2_type,
+                    "value": team2_value
+                },
+                "player2": {
+                    "type": player2_type,
+                    "value": player2_value
+                }
+            })
+
                 
             
 
@@ -575,6 +626,33 @@ def interpreter(ast, variables=None, leagues=None):
                 variables[league_name][team_name].append(player_name)
             else:
                 raise ValueError("League does not exist: " + league_name)
+        elif item["type"] == "Trade_Statement":
+            team1 = item["team1"]["value"]
+            player1 = item["player1"]["value"]
+            team2 = item["team2"]["value"]
+            player2 = item["player2"]["value"]
+            
+            #find the teams and players in the variables and trade them
+            #league is already checked in the player declaration, so we can assume the league exists
+            team1_found = False
+            team2_found = False
+            for league in variables:
+                if team1 in variables[league]:
+                    if player1 in variables[league][team1]:
+                        team1_found = True
+                        variables[league][team1].remove(player1)
+                        print(f"Traded {player1} from {team1} to {team2}")
+                    else:
+                        raise ValueError("Player " + player1 + " not found on team " + team1)
+                if team2 in variables[league]:
+                    if player2 in variables[league][team2]:
+                        team2_found = True
+                        variables[league][team2].remove(player2)
+                        print(f"Traded {player2} from {team2} to {team1}")
+                    else:
+                        raise ValueError("Player " + player2 + " not found on team " + team2)
+
+                
         elif item["type"] == "BinaryExpression":
 
             if item["left"]["type"] == "IDENTIFIER":
