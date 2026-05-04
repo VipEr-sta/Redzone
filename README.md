@@ -143,7 +143,7 @@ operators = "=" | "+" | "-" | "*" | "/";
 | Feature | Keyword | Example|
 |---------|---------|--------|
 | Variable | `let` | `let x = 5;` |
-| Print | `sprint` | `sprint("Hi");` |
+| Sprint | `sprint` | `sprint("Hi");` |
 |If Statement | `if` | `if (x == 5) {x + 1;}`|
 |Else Statement | `else` | `else {x-1;}`|
 |Else If Statement | `else if` | `else if (x == 4) {x+2;}` |
@@ -160,6 +160,26 @@ operators = "=" | "+" | "-" | "*" | "/";
 | Comparision Operators | `==, !=, etc` | `if (x != 10) {x = 0;}`
 | Operators | `=, +, -, etc` | `y = 5 + 5;` |
 
+1. What works:
+   1. Variable
+   2. Sprint
+   3. If Statement
+   4. Else If Statement
+   5. Else Statement
+   6. For Loop
+   7. Single Lie Comment
+   8. Multiline Comment
+   9. Player
+   10. Team
+   11. League
+   12. Trade Statement
+   13. Scoped Identifier
+   14. Comparison Operators
+   15. Operators
+       
+1. What doesn't work:
+   1. Slice
+   2. Stats
 
 Memebers: Elijah Goglin
 
