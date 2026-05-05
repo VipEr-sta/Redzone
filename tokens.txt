@@ -1,3 +1,304 @@
-tokens = [
-    {type: "SEMICOLON", value: ";"}
-]
+[{'type': 'KEYWORD', 'value': 'league'}, {'type': 'IDENTIFIER', 'value': 'myLeague'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'KEYWORD', 'value': 'team'}, {'type': 'IDENTIFIER', 'value': 'myLeague'}, {'type': 'DOT', 'value': '.'}, {'type': 'IDENTIFIER', 'value': 'myTeam'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'KEYWORD', 'value': 'team'}, {'type': 'IDENTIFIER', 'value': 'myLeague'}, {'type': 'DOT', 'value': '.'}, {'type': 'IDENTIFIER', 'value': 'myTeamOne'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'KEYWORD', 'value': 'player'}, {'type': 'IDENTIFIER', 'value': 'myLeague'}, {'type': 'DOT', 'value': '.'}, {'type': 'IDENTIFIER', 'value': 'myTeam'}, {'type': 'DOT', 'value': '.'}, {'type': 'IDENTIFIER', 'value': 'myPlayer'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'KEYWORD', 'value': 'player'}, {'type': 'IDENTIFIER', 'value': 'myLeague'}, {'type': 'DOT', 'value': '.'}, {'type': 'IDENTIFIER', 'value': 'myTeamOne'}, {'type': 'DOT', 'value': '.'}, {'type': 'IDENTIFIER', 'value': 'playerOne'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'KEYWORD', 'value': 'trade'}, {'type': 'LBRACE', 'value': '{'}, {'type': 'IDENTIFIER', 'value': 'myTeam'}, {'type': 'DOT', 'value': '.'}, {'type': 'IDENTIFIER', 'value': 'myPlayer'}, {'type': 'KEYWORD', 'value': 'with'}, {'type': 'IDENTIFIER', 'value': 'myTeamOne'}, {'type': 'DOT', 'value': '.'}, {'type': 'IDENTIFIER', 'value': 'playerOne'}, {'type': 'RBRACE', 'value': '}'}, {'type': 'KEYWORD', 'value': 'let'}, {'type': 'IDENTIFIER', 'value': 'x'}, {'type': 'EQUALS', 'value': '='}, {'type': 'NUMBER', 'value': 5}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'KEYWORD', 'value': 'let'}, {'type': 'IDENTIFIER', 'value': 'y'}, {'type': 'EQUALS', 'value': '='}, {'type': 'IDENTIFIER', 'value': 'x'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'KEYWORD', 'value': 'let'}, {'type': 'IDENTIFIER', 'value': 'my'}, {'type': 'EQUALS', 'value': '='}, {'type': 'STRING', 'value': 'Hello '}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'KEYWORD', 'value': 'let'}, {'type': 'IDENTIFIER', 'value': 'new'}, {'type': 'EQUALS', 'value': '='}, {'type': 'STRING', 'value': 'World'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'IDENTIFIER', 'value': 'my'}, {'type': 'PLUS', 'value': '+'}, {'type': 'IDENTIFIER', 'value': 'new'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'KEYWORD', 'value': 'sprint'}, {'type': 'LPAREN', 'value': '('}, {'type': 'IDENTIFIER', 'value': 'my'}, {'type': 'RPAREN', 'value': ')'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'KEYWORD', 'value': 'sprint'}, {'type': 'LPAREN', 'value': '('}, {'type': 'IDENTIFIER', 'value': 'x'}, {'type': 'RPAREN', 'value': ')'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'KEYWORD', 'value': 'sprint'}, {'type': 'LPAREN', 'value': '('}, {'type': 'IDENTIFIER', 'value': 'y'}, {'type': 'RPAREN', 'value': ')'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'KEYWORD', 'value': 'let'}, {'type': 'IDENTIFIER', 'value': 'z'}, {'type': 'EQUALS', 'value': '='}, {'type': 'BOOLEAN', 'value': 'False'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'KEYWORD', 'value': 'sprint'}, {'type': 'LPAREN', 'value': '('}, {'type': 'IDENTIFIER', 'value': 'z'}, {'type': 'RPAREN', 'value': ')'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'KEYWORD', 'value': 'if'}, {'type': 'LPAREN', 'value': '('}, {'type': 'IDENTIFIER', 'value': 'x'}, {'type': 'EQUALS_EQUALS', 'value': '=='}, {'type': 'NUMBER', 'value': 5}, {'type': 'RPAREN', 'value': ')'}, {'type': 'LBRACE', 'value': '{'}, {'type': 'KEYWORD', 'value': 'let'}, {'type': 'IDENTIFIER', 'value': 'x'}, {'type': 'EQUALS', 'value': '='}, {'type': 'NUMBER', 'value': 6}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'KEYWORD', 'value': 'sprint'}, {'type': 'LPAREN', 'value': '('}, {'type': 'IDENTIFIER', 'value': 'x'}, {'type': 'RPAREN', 'value': ')'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'RBRACE', 'value': '}'}, {'type': 'KEYWORD', 'value': 'else'}, {'type': 'KEYWORD', 'value': 'if'}, {'type': 'LPAREN', 'value': '('}, {'type': 'IDENTIFIER', 'value': 'x'}, {'type': 'EQUALS_EQUALS', 'value': '=='}, {'type': 'NUMBER', 'value': 4}, {'type': 'RPAREN', 'value': ')'}, {'type': 'LBRACE', 'value': '{'}, {'type': 'KEYWORD', 'value': 'sprint'}, {'type': 'LPAREN', 'value': '('}, {'type': 'IDENTIFIER', 'value': 'my'}, {'type': 'RPAREN', 'value': ')'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'RBRACE', 'value': '}'}, {'type': 'KEYWORD', 'value': 'else'}, {'type': 'LBRACE', 'value': '{'}, {'type': 'KEYWORD', 'value': 'sprint'}, {'type': 'LPAREN', 'value': '('}, {'type': 'IDENTIFIER', 'value': 'z'}, {'type': 'RPAREN', 'value': ')'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'RBRACE', 'value': '}'}, {'type': 'KEYWORD', 'value': 'for'}, {'type': 'LPAREN', 'value': '('}, {'type': 'KEYWORD', 'value': 'let'}, {'type': 'IDENTIFIER', 'value': 'i'}, {'type': 'EQUALS', 'value': '='}, {'type': 'NUMBER', 'value': 0}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'IDENTIFIER', 'value': 'i'}, {'type': 'LESS_THAN', 'value': '<'}, {'type': 'NUMBER', 'value': 5}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'IDENTIFIER', 'value': 'i'}, {'type': 'PLUS', 'value': '+'}, {'type': 'RPAREN', 'value': ')'}, {'type': 'LBRACE', 'value': '{'}, {'type': 'KEYWORD', 'value': 'sprint'}, {'type': 'LPAREN', 'value': '('}, {'type': 'IDENTIFIER', 'value': 'i'}, {'type': 'RPAREN', 'value': ')'}, {'type': 'SEMICOLON', 'value': ';'}, {'type': 'RBRACE', 'value': '}'}]
+{'type': 'KEYWORD', 'value': 'team'}
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "League_Declaration",
+      "name": "myLeague"
+    },
+    {
+      "type": "Team_Declaration",
+      "name": "myTeam",
+      "league": "myLeague"
+    },
+    {
+      "type": "Team_Declaration",
+      "name": "myTeamOne",
+      "league": "myLeague"
+    },
+    {
+      "type": "Player_Declaration",
+      "name": "myPlayer",
+      "team": "myTeam",
+      "league": "myLeague"
+    },
+    {
+      "type": "Player_Declaration",
+      "name": "playerOne",
+      "team": "myTeamOne",
+      "league": "myLeague"
+    },
+    {
+      "type": "Trade_Statement",
+      "team1": {
+        "type": "IDENTIFIER",
+        "value": "myTeam"
+      },
+      "player1": {
+        "type": "IDENTIFIER",
+        "value": "myPlayer"
+      },
+      "team2": {
+        "type": "IDENTIFIER",
+        "value": "myTeamOne"
+      },
+      "player2": {
+        "type": "IDENTIFIER",
+        "value": "playerOne"
+      }
+    },
+    {
+      "type": "VariableDeclaration",
+      "name": "x",
+      "value": {
+        "type": "NUMBER",
+        "value": 5
+      }
+    },
+    {
+      "type": "VariableDeclaration",
+      "name": "y",
+      "value": {
+        "type": "IDENTIFIER",
+        "value": "x"
+      }
+    },
+    {
+      "type": "VariableDeclaration",
+      "name": "my",
+      "value": {
+        "type": "STRING",
+        "value": "Hello "
+      }
+    },
+    {
+      "type": "VariableDeclaration",
+      "name": "new",
+      "value": {
+        "type": "STRING",
+        "value": "World"
+      }
+    },
+    {
+      "type": "BinaryExpression",
+      "left": {
+        "type": "IDENTIFIER",
+        "value": "my"
+      },
+      "operator": "+",
+      "right": {
+        "type": "IDENTIFIER",
+        "value": "new"
+      }
+    },
+    {
+      "type": "PrintStatement",
+      "name": "my",
+      "argument": {
+        "type": "Identifier",
+        "value": "my"
+      }
+    },
+    {
+      "type": "PrintStatement",
+      "name": "x",
+      "argument": {
+        "type": "Identifier",
+        "value": "x"
+      }
+    },
+    {
+      "type": "PrintStatement",
+      "name": "y",
+      "argument": {
+        "type": "Identifier",
+        "value": "y"
+      }
+    },
+    {
+      "type": "VariableDeclaration",
+      "name": "z",
+      "value": {
+        "type": "BOOLEAN",
+        "value": "False"
+      }
+    },
+    {
+      "type": "PrintStatement",
+      "name": "z",
+      "argument": {
+        "type": "Identifier",
+        "value": "z"
+      }
+    },
+    {
+      "type": "If_Statement",
+      "condition": {
+        "left": {
+          "type": "IDENTIFIER",
+          "value": "x"
+        },
+        "operator": "==",
+        "right": {
+          "type": "NUMBER",
+          "value": 5
+        },
+        "body": [
+          {
+            "type": "KEYWORD",
+            "value": "let"
+          },
+          {
+            "type": "IDENTIFIER",
+            "value": "x"
+          },
+          {
+            "type": "EQUALS",
+            "value": "="
+          },
+          {
+            "type": "NUMBER",
+            "value": 6
+          },
+          {
+            "type": "SEMICOLON",
+            "value": ";"
+          },
+          {
+            "type": "KEYWORD",
+            "value": "sprint"
+          },
+          {
+            "type": "LPAREN",
+            "value": "("
+          },
+          {
+            "type": "IDENTIFIER",
+            "value": "x"
+          },
+          {
+            "type": "RPAREN",
+            "value": ")"
+          },
+          {
+            "type": "SEMICOLON",
+            "value": ";"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Else_If_Statement",
+      "condition": {
+        "left": {
+          "type": "IDENTIFIER",
+          "value": "x"
+        },
+        "operator": "==",
+        "right": {
+          "type": "NUMBER",
+          "value": 4
+        },
+        "body": [
+          {
+            "type": "KEYWORD",
+            "value": "sprint"
+          },
+          {
+            "type": "LPAREN",
+            "value": "("
+          },
+          {
+            "type": "IDENTIFIER",
+            "value": "my"
+          },
+          {
+            "type": "RPAREN",
+            "value": ")"
+          },
+          {
+            "type": "SEMICOLON",
+            "value": ";"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Else_Statement",
+      "body": [
+        {
+          "type": "KEYWORD",
+          "value": "sprint"
+        },
+        {
+          "type": "LPAREN",
+          "value": "("
+        },
+        {
+          "type": "IDENTIFIER",
+          "value": "z"
+        },
+        {
+          "type": "RPAREN",
+          "value": ")"
+        },
+        {
+          "type": "SEMICOLON",
+          "value": ";"
+        }
+      ]
+    },
+    {
+      "type": "For_Loop",
+      "declaration": {
+        "type": "VariableDeclaration",
+        "name": "i",
+        "value": {
+          "type": "NUMBER",
+          "value": 0
+        }
+      },
+      "condition": {
+        "left": {
+          "type": "IDENTIFIER",
+          "value": "i"
+        },
+        "operator": "<",
+        "right": {
+          "type": "NUMBER",
+          "value": 5
+        }
+      },
+      "increment": {
+        "variable": {
+          "type": "IDENTIFIER",
+          "value": "i"
+        },
+        "operator": "+"
+      },
+      "body": [
+        {
+          "type": "KEYWORD",
+          "value": "sprint"
+        },
+        {
+          "type": "LPAREN",
+          "value": "("
+        },
+        {
+          "type": "IDENTIFIER",
+          "value": "i"
+        },
+        {
+          "type": "RPAREN",
+          "value": ")"
+        },
+        {
+          "type": "SEMICOLON",
+          "value": ";"
+        }
+      ]
+    }
+  ]
+}
