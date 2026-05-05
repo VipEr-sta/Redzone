@@ -644,7 +644,11 @@ def interpreter(ast, variables=None, leagues=None):
                     if player1 in variables[league][team1]:
                         team1_found = True
                         variables[league][team1].remove(player1)
-                        print(f"Traded {player1} from {team1} to {team2}")
+                        #Add player to team
+                        if team2 in variables[league]:
+                            variables[league][team2].append(player1)
+
+                        print(variables)
                     else:
                         raise ValueError("Player " + player1 + " not found on team " + team1)
                     
@@ -652,7 +656,10 @@ def interpreter(ast, variables=None, leagues=None):
                     if player2 in variables[league][team2]:
                         team2_found = True
                         variables[league][team2].remove(player2)
-                        print(f"Traded {player2} from {team2} to {team1}")
+                        #Add player to team
+                        if team1 in variables[league]:
+                            variables[league][team1].append(player2)
+                        print(variables)
                     else:
                         raise ValueError("Player " + player2 + " not found on team " + team2)
 
