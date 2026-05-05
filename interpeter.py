@@ -659,6 +659,7 @@ def interpreter(ast, variables=None, leagues=None):
                         #Add player to team
                         if team1 in variables[league]:
                             variables[league][team1].append(player2)
+                        
                         print(variables)
                     else:
                         raise ValueError("Player " + player2 + " not found on team " + team2)
